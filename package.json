@@ -4,7 +4,8 @@
   "description": "Create a printer on the network",
   "main": "index.js",
   "dependencies": {
-    "bonjour": "git://github.com/watson/bonjour"
+    "bonjour": "git://github.com/watson/bonjour",
+    "ipp-encoder": "^3.0.0"
   },
   "devDependencies": {
     "standard": "^5.4.1",
