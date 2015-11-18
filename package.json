@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "bonjour": "git://github.com/watson/bonjour",
+    "debug": "^2.2.0",
     "ipp-encoder": "^3.0.0"
   },
   "devDependencies": {
