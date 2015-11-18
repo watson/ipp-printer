@@ -53,8 +53,8 @@ function Printer (opts) {
   server.on('request', handleRequest.bind(null, this))
 
   server.listen(opts.port, function () {
-    var port = server.address().port
-    bonjour.tcp.publish({ type: 'ipp', port: port, name: self.name }, function (err) {
+    self.port = server.address().port
+    bonjour.tcp.publish({ type: 'ipp', port: self.port, name: self.name }, function (err) {
       if (err) throw err
     })
   })
