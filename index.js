@@ -17,7 +17,7 @@ module.exports = Printer
 
 function Printer (opts) {
   if (!(this instanceof Printer)) return new Printer(opts)
-  if (!opts) opts = { name: 'Node.js' }
+  if (!opts) opts = { name: 'Node JS' }
   else if (typeof opts === 'string') opts = { name: opts }
 
   EventEmitter.call(this)

@@ -32,7 +32,7 @@ printer.on('job', function (job) {
 The Printer object can be initialized with either the printer name as a
 string or an object containing:
 
-- `name` - Optional name of the printer (defaults to `Node.js`)
+- `name` - Optional name of the printer (defaults to `Node JS`)
 - `port` - Optional port the printer should listen on (defaults to a
   random available port)
 
