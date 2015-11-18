@@ -4,6 +4,8 @@ An IPP printer written in Node.js.
 
 **This is work in progress!**
 
+![ipp-printer](https://raw.githubusercontent.com/watson/ipp-printer/master/ipp-printer.gif)
+
 [![Build status](https://travis-ci.org/watson/ipp-printer.svg?branch=master)](https://travis-ci.org/watson/ipp-printer)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
