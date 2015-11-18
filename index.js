@@ -54,9 +54,7 @@ function Printer (opts) {
 
   server.listen(opts.port, function () {
     self.port = server.address().port
-    bonjour.tcp.publish({ type: 'ipp', port: self.port, name: self.name }, function (err) {
-      if (err) throw err
-    })
+    bonjour.tcp.publish({ type: 'ipp', port: self.port, name: self.name })
   })
 
   function jobCount () {
