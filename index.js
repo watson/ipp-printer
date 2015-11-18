@@ -89,12 +89,15 @@ function handleRequest (printer, req, res) {
 
   res.send = send.bind(null, req, res)
 
+  var self = this
   var buffers = []
   req.on('data', buffers.push.bind(buffers))
   req.on('end', function () {
     var data = Buffer.concat(buffers)
 
     req.body = ipp.request.decode(data)
+
+    self.emit('request', req)
 
     if (req.body.version.major !== 1) {
       res.send(C.SERVER_ERROR_VERSION_NOT_SUPPORTED)

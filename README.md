@@ -70,6 +70,15 @@ Job object example:
 See the [ipp-encoder](https://github.com/watson/ipp-encoder) for an
 explanation of the tag values.
 
+### Event: request
+
+```js
+function (request) {}
+```
+
+Emitted each time a new IPP request is received. The request body is
+available via `request.body`.
+
 ### `printer.name`
 
 The printer name.
