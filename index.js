@@ -48,12 +48,10 @@ function Printer (opts) {
   ]
 
   var self = this
-  var server = http.createServer()
 
-  server.on('request', handleRequest.bind(null, this))
-
-  server.listen(opts.port, function () {
-    self.port = server.address().port
+  this.server = http.createServer(handleRequest.bind(null, this))
+  this.server.listen(opts.port, function () {
+    self.port = self.server.address().port
     bonjour.tcp.publish({ type: 'ipp', port: self.port, name: self.name })
   })
 
