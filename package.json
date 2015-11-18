@@ -1,6 +1,6 @@
 {
   "name": "ipp-printer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create a printer on the network",
   "main": "index.js",
   "dependencies": {
@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/watson/ipp-printer",
   "coordinates": [
-    37.8006978,
-    -122.2698573
+    37.7830787,
+    -122.4065891
   ]
 }
