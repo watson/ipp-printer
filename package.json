@@ -1,0 +1,38 @@
+{
+  "name": "ipp-printer",
+  "version": "0.0.0",
+  "description": "Create a printer on the network",
+  "main": "index.js",
+  "dependencies": {
+    "bonjour": "git://github.com/watson/bonjour"
+  },
+  "devDependencies": {
+    "standard": "^5.4.1",
+    "tape": "^4.2.2"
+  },
+  "scripts": {
+    "test": "standard",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/watson/ipp-printer.git"
+  },
+  "keywords": [
+    "ipp",
+    "printer",
+    "print",
+    "server",
+    "network",
+    "bonjour",
+    "zeroconf",
+    "mdns",
+    "multicast"
+  ],
+  "author": "Thomas Watson Steen <w@tson.dk> (https://twitter.com/wa7son)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/watson/ipp-printer/issues"
+  },
+  "homepage": "https://github.com/watson/ipp-printer"
+}
