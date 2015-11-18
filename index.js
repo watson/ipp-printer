@@ -53,7 +53,7 @@ function Printer (opts) {
   this.server = http.createServer(handleRequest.bind(null, this))
   this.server.listen(opts.port, function () {
     self.port = self.server.address().port
-    debug('IPP printer listening on port %s', self.port)
+    debug('IPP printer "%s" listening on port %s', self.name, self.port)
     bonjour.tcp.publish({ type: 'ipp', port: self.port, name: self.name })
   })
 
