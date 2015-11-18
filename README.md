@@ -27,7 +27,7 @@ printer.on('job', function (job) {
 
 ## API
 
-### `new Printer([options])
+### `new Printer([options])`
 
 The Printer object can be initialized with either the printer name as a
 string or an object containing:
