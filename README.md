@@ -1,8 +1,8 @@
 # ipp-printer
 
-An IPP printer written in Node.js.
+**Create a printer on your network using nothing but Node.js**. This module implements the [IPP](https://en.wikipedia.org/wiki/Internet_Printing_Protocol) protocol and uses [Bonjour](https://github.com/watson/bonjour) to advertise a printer on your local network that anyone can print to.
 
-**This is work in progress!**
+*This module is still work in progress!*
 
 ![ipp-printer](https://raw.githubusercontent.com/watson/ipp-printer/master/ipp-printer.gif)
 
