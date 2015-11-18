@@ -54,10 +54,8 @@ function Printer (opts) {
 
   server.listen(opts.port, function () {
     var port = server.address().port
-    console.log('IPP printer listening on port', port)
     bonjour.tcp.publish({ type: 'ipp', port: port, name: self.name }, function (err) {
       if (err) throw err
-      console.log('Bonjour agent running...')
     })
   })
 
@@ -79,10 +77,6 @@ Printer.prototype.getJob = function (id) {
 }
 
 function handleRequest (printer, req, res) {
-  console.log('-----------------------')
-  console.log(req.method, req.url)
-  console.log(req.headers)
-
   if (req.method !== 'POST') {
     res.writeHead(405)
     res.end()
@@ -142,7 +136,6 @@ function send (req, res, statusCode, _groups) {
   obj.groups = [groups.operationAttributesTag(ipp.STATUS_CODES[statusCode])]
   if (_groups) obj.groups = obj.groups.concat(_groups)
 
-  console.log('--> encoding', require('util').inspect(obj, { depth: null }))
   var buf = ipp.response.encode(obj)
 
   res.writeHead(200, {
