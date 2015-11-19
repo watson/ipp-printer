@@ -89,7 +89,6 @@ function handleRequest (printer, req, res) {
 
   res.send = send.bind(null, req, res)
 
-  var self = this
   var buffers = []
   req.on('data', buffers.push.bind(buffers))
   req.on('end', function () {
@@ -112,7 +111,7 @@ function handleRequest (printer, req, res) {
         case C.CREATE_JOB:
         case C.PAUSE_PRINTER:
         case C.RESUME_PRINTER:
-        case C.PURGE_JOBS: throw new Error('Unsupported operation id')
+        case C.PURGE_JOBS: return printer.emit('error', new Error('Unsupported operation id: ' + req.body.operationId))
 
         // Job Operations
         case C.CANCEL_JOB: return operations.cancelJob(printer, req, res)
@@ -121,9 +120,9 @@ function handleRequest (printer, req, res) {
         case C.SEND_URI:
         case C.HOLD_JOB:
         case C.RELEASE_JOB:
-        case C.RESTART_JOB: throw new Error('Unsupported operation id')
+        case C.RESTART_JOB: return printer.emit('error', new Error('Unsupported operation id: ' + req.body.operationId))
 
-        default: throw new Error('Unknown operation id')
+        default: return printer.emit('error', new Error('Unknown operation id: ' + req.body.operationId))
       }
     }
   })

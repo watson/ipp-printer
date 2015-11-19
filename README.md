@@ -88,6 +88,14 @@ function (request) {}
 Emitted each time a new IPP request is received. The request body is
 available via `request.body`.
 
+### Event: error
+
+```js
+function (error) {}
+```
+
+Emitted if the IPP printer encounters an error.
+
 ### `printer.name`
 
 The printer name.
