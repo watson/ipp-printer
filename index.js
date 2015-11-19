@@ -97,7 +97,7 @@ function handleRequest (printer, req, res) {
 
     req.body = ipp.request.decode(data)
 
-    self.emit('request', req)
+    printer.emit('request', req)
 
     if (req.body.version.major !== 1) {
       res.send(C.SERVER_ERROR_VERSION_NOT_SUPPORTED)
