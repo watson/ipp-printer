@@ -98,32 +98,30 @@ function handleRequest (printer, req, res) {
 
     printer.emit('request', req)
 
-    if (req.body.version.major !== 1) {
-      res.send(C.SERVER_ERROR_VERSION_NOT_SUPPORTED)
-    } else {
-      switch (req.body.operationId) {
-        // Printer Operations
-        case C.PRINT_JOB: return operations.printJob(printer, req, res)
-        case C.VALIDATE_JOB: return operations.validateJob(printer, req, res)
-        case C.GET_PRINTER_ATTRIBUTES: return operations.getPrinterAttributes(printer, req, res)
-        case C.GET_JOBS: return operations.getJobs(printer, req, res)
-        case C.PRINT_URI:
-        case C.CREATE_JOB:
-        case C.PAUSE_PRINTER:
-        case C.RESUME_PRINTER:
-        case C.PURGE_JOBS: return printer.emit('error', new Error('Unsupported operation id: ' + req.body.operationId))
+    if (req.body.version.major !== 1) return res.send(C.SERVER_ERROR_VERSION_NOT_SUPPORTED)
 
-        // Job Operations
-        case C.CANCEL_JOB: return operations.cancelJob(printer, req, res)
-        case C.GET_JOB_ATTRIBUTES: return operations.getJobAttributes(printer, req, res)
-        case C.SEND_DOCUMENT:
-        case C.SEND_URI:
-        case C.HOLD_JOB:
-        case C.RELEASE_JOB:
-        case C.RESTART_JOB: return printer.emit('error', new Error('Unsupported operation id: ' + req.body.operationId))
+    switch (req.body.operationId) {
+      // Printer Operations
+      case C.PRINT_JOB: return operations.printJob(printer, req, res)
+      case C.VALIDATE_JOB: return operations.validateJob(printer, req, res)
+      case C.GET_PRINTER_ATTRIBUTES: return operations.getPrinterAttributes(printer, req, res)
+      case C.GET_JOBS: return operations.getJobs(printer, req, res)
+      case C.PRINT_URI:
+      case C.CREATE_JOB:
+      case C.PAUSE_PRINTER:
+      case C.RESUME_PRINTER:
+      case C.PURGE_JOBS: return printer.emit('error', new Error('Unsupported operation id: ' + req.body.operationId))
 
-        default: return printer.emit('error', new Error('Unknown operation id: ' + req.body.operationId))
-      }
+      // Job Operations
+      case C.CANCEL_JOB: return operations.cancelJob(printer, req, res)
+      case C.GET_JOB_ATTRIBUTES: return operations.getJobAttributes(printer, req, res)
+      case C.SEND_DOCUMENT:
+      case C.SEND_URI:
+      case C.HOLD_JOB:
+      case C.RELEASE_JOB:
+      case C.RESTART_JOB: return printer.emit('error', new Error('Unsupported operation id: ' + req.body.operationId))
+
+      default: return printer.emit('error', new Error('Unknown operation id: ' + req.body.operationId))
     }
   })
 }
