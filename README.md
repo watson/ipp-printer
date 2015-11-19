@@ -1,6 +1,10 @@
 # ipp-printer
 
-**Create a printer on your network using nothing but Node.js**. This module implements the [IPP](https://en.wikipedia.org/wiki/Internet_Printing_Protocol) protocol and uses [Bonjour](https://github.com/watson/bonjour) to advertise a printer on your local network that anyone can print to.
+**Create a printer on your network using nothing but Node.js**. This
+module implements version 1.1 of the
+[IPP](https://en.wikipedia.org/wiki/Internet_Printing_Protocol) protocol
+and uses [Bonjour](https://github.com/watson/bonjour) to advertise a
+printer on your local network that anyone can print to.
 
 *This module is still work in progress!*
 
@@ -37,6 +41,9 @@ string or an object containing:
 - `name` - Optional name of the printer (defaults to `Node JS`)
 - `port` - Optional port the printer should listen on (defaults to a
   random available port)
+
+Note that the IPP standard specifies port 631 as the default IPP port,
+but most IPP clients are fine with connecting to another port.
 
 ### Event: job
 
