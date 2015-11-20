@@ -10,6 +10,7 @@ var debug = require('debug')(require('./package').name)
 var utils = require('./lib/utils')
 var groups = require('./lib/groups')
 var operations = require('./lib/operations')
+var Request = require('./lib/request')
 
 var C = ipp.CONSTANTS
 
@@ -50,7 +51,55 @@ function Printer (opts) {
 
   var self = this
 
-  this.server = http.createServer(handleRequest.bind(null, this))
+  this.server = http.createServer(function handleRequest (req, res) {
+    debug('incoming request: %s %s', req.method, req.url)
+
+    if (req.method !== 'POST') {
+      res.writeHead(405)
+      res.end()
+      return
+    } else if (req.headers['content-type'] !== 'application/ipp') {
+      res.writeHead(400)
+      res.end()
+      return
+    }
+
+    var body
+
+    req.on('data', onData)
+    req.on('end', onEnd)
+
+    function onData (chunk) {
+      body = body ? Buffer.concat([body, chunk]) : chunk
+
+      try {
+        body = ipp.request.decode(body)
+      } catch (e) {
+        debug('incomplete IPP body - waiting for more data...')
+        return
+      }
+
+      var ippRequest = new Request(body)
+
+      if (body.data.length) {
+        debug('writing %d left over bytes to ippRequest', body.data.length)
+        ippRequest.write(body.data)
+      }
+
+      req.removeListener('data', onData)
+      req.removeListener('end', onEnd)
+      req.on('end', ippRequest.end.bind(ippRequest))
+      req.pipe(ippRequest)
+
+      self.emit('request', ippRequest)
+      router(self, ippRequest, res)
+    }
+
+    function onEnd () {
+      self.emit('error', new Error('Malformed IPP request'))
+    }
+  })
+
   this.server.listen(opts.port, function () {
     self.port = self.server.address().port
     debug('IPP printer "%s" listening on port %s', self.name, self.port)
@@ -74,56 +123,36 @@ Printer.prototype.getJob = function (id) {
   }
 }
 
-function handleRequest (printer, req, res) {
-  debug('incoming request: %s %s', req.method, req.url)
-
-  if (req.method !== 'POST') {
-    res.writeHead(405)
-    res.end()
-    return
-  } else if (req.headers['content-type'] !== 'application/ipp') {
-    res.writeHead(400)
-    res.end()
-    return
-  }
+function router (printer, req, res) {
+  debug('new IPP request %d (operation: %d)', req.requestId, req.operationId, util.inspect(req.groups, { depth: null }))
 
   res.send = send.bind(null, req, res)
 
-  var buffers = []
-  req.on('data', buffers.push.bind(buffers))
-  req.on('end', function () {
-    var data = Buffer.concat(buffers)
+  if (req.version.major !== 1) return res.send(C.SERVER_ERROR_VERSION_NOT_SUPPORTED)
 
-    req.body = ipp.request.decode(data)
+  switch (req.operationId) {
+    // Printer Operations
+    case C.PRINT_JOB: return operations.printJob(printer, req, res)
+    case C.VALIDATE_JOB: return operations.validateJob(printer, req, res)
+    case C.GET_PRINTER_ATTRIBUTES: return operations.getPrinterAttributes(printer, req, res)
+    case C.GET_JOBS: return operations.getJobs(printer, req, res)
+    case C.PRINT_URI:
+    case C.CREATE_JOB:
+    case C.PAUSE_PRINTER:
+    case C.RESUME_PRINTER:
+    case C.PURGE_JOBS: return printer.emit('error', new Error('Unsupported operation id: ' + req.operationId))
 
-    printer.emit('request', req)
+    // Job Operations
+    case C.CANCEL_JOB: return operations.cancelJob(printer, req, res)
+    case C.GET_JOB_ATTRIBUTES: return operations.getJobAttributes(printer, req, res)
+    case C.SEND_DOCUMENT:
+    case C.SEND_URI:
+    case C.HOLD_JOB:
+    case C.RELEASE_JOB:
+    case C.RESTART_JOB: return printer.emit('error', new Error('Unsupported operation id: ' + req.operationId))
 
-    if (req.body.version.major !== 1) return res.send(C.SERVER_ERROR_VERSION_NOT_SUPPORTED)
-
-    switch (req.body.operationId) {
-      // Printer Operations
-      case C.PRINT_JOB: return operations.printJob(printer, req, res)
-      case C.VALIDATE_JOB: return operations.validateJob(printer, req, res)
-      case C.GET_PRINTER_ATTRIBUTES: return operations.getPrinterAttributes(printer, req, res)
-      case C.GET_JOBS: return operations.getJobs(printer, req, res)
-      case C.PRINT_URI:
-      case C.CREATE_JOB:
-      case C.PAUSE_PRINTER:
-      case C.RESUME_PRINTER:
-      case C.PURGE_JOBS: return printer.emit('error', new Error('Unsupported operation id: ' + req.body.operationId))
-
-      // Job Operations
-      case C.CANCEL_JOB: return operations.cancelJob(printer, req, res)
-      case C.GET_JOB_ATTRIBUTES: return operations.getJobAttributes(printer, req, res)
-      case C.SEND_DOCUMENT:
-      case C.SEND_URI:
-      case C.HOLD_JOB:
-      case C.RELEASE_JOB:
-      case C.RESTART_JOB: return printer.emit('error', new Error('Unsupported operation id: ' + req.body.operationId))
-
-      default: return printer.emit('error', new Error('Unknown operation id: ' + req.body.operationId))
-    }
-  })
+    default: return printer.emit('error', new Error('Unknown operation id: ' + req.operationId))
+  }
 }
 
 function send (req, res, statusCode, _groups) {
@@ -132,7 +161,7 @@ function send (req, res, statusCode, _groups) {
 
   var obj = {}
   obj.statusCode = statusCode
-  obj.requestId = req.body.requestId
+  obj.requestId = req.requestId
   obj.groups = [groups.operationAttributesTag(ipp.STATUS_CODES[statusCode])]
   if (_groups) obj.groups = obj.groups.concat(_groups)
 

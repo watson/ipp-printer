@@ -27,7 +27,8 @@ var Printer = require('ipp-printer')
 var printer = new Printer('My Printer')
 
 printer.on('job', function (job) {
-  fs.writeFile('job.ps', job.data)
+  var file = fs.createWriteStream('job.js')
+  job.pipe(file)
 })
 ```
 
@@ -51,33 +52,32 @@ but most IPP clients are fine with connecting to another port.
 function (job) {}
 ```
 
-Emitted each time a new job is ready. The actual document data will be
-available via `job.data`.
+Emitted each time a new job is sent to the printer. The `job` is a
+readable stream of the document data being printed.
 
-Job object example:
+Each job object have the following attributes:
+
+- `id` - The id of the job
+- `state` - The job state
+- `attributes` - The job attributes
+
+Attributes example:
 
 ```js
-{
-  id: 1,
-  state: 9,
-  data: <Buffer 25 21 50 ...>,
-  attributes: [
-    { tag: 69, name: 'job-printer-uri', value: 'ipp://watson.local.:3000/' },
-    { tag: 69, name: 'job-uri', value: 'ipp://watson.local.:3000/1' },
-    { tag: 66, name: 'job-name', value: 'My Document Title' },
-    { tag: 66, name: 'job-originating-user-name', value: 'watson' },
-    { tag: 68, name: 'job-state-reasons', value: 'none' },
-    { tag: 33, name: 'time-at-creation', value: 40 },
-    { tag: 71, name: 'attributes-charset', value: 'utf-8' },
-    { tag: 72, name: 'attributes-natural-language', value: 'en-us' }
-  ],
-  processingAt: 1447830263340,
-  completedAt: 1447830263340
-}
+[
+  { tag: 0x45, name: 'job-printer-uri', value: 'ipp://watson.local.:3000/' },
+  { tag: 0x45, name: 'job-uri', value: 'ipp://watson.local.:3000/1' },
+  { tag: 0x42, name: 'job-name', value: 'My Document Title' },
+  { tag: 0x42, name: 'job-originating-user-name', value: 'watson' },
+  { tag: 0x44, name: 'job-state-reasons', value: 'none' },
+  { tag: 0x21, name: 'time-at-creation', value: 40 },
+  { tag: 0x47, name: 'attributes-charset', value: 'utf-8' },
+  { tag: 0x48, name: 'attributes-natural-language', value: 'en-us' }
+]
 ```
 
 See the [ipp-encoder](https://github.com/watson/ipp-encoder) for an
-explanation of the tag values.
+explanation of the job states and tag values.
 
 ### Event: request
 
@@ -85,8 +85,32 @@ explanation of the tag values.
 function (request) {}
 ```
 
-Emitted each time a new IPP request is received. The request body is
-available via `request.body`.
+Emitted each time a new IPP request is received. This event is more low
+level than the job event as it will be emitted on all incoming IPP
+operations.
+
+This module currently supports the minimum set of operations required by
+the IPP standard:
+
+- print-job (0x02)
+- validate-job (0x04)
+- cancel-job (0x08)
+- get-job-attribtes (0x09)
+- get-jobs (0x0a)
+- get-printer-attributes (0x0b)
+
+The `request` object is a readable stream of the IPP data field. The
+print-job operation is currently the only operation where the `request`
+stream contains any data.
+
+The `request` object have the following properties supplied by the
+printer client:
+
+- `version` - An object containing the major and minor IPP version of
+  the request (e.g. `{ major: 1, minor: 1 }`)
+- `operationId` - The id of the IPP operation
+- `requestId` - The id of the IPP request
+- `groups` - And array of IPP attribute groups
 
 ### Event: error
 
