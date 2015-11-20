@@ -35,7 +35,7 @@ function Printer (opts) {
     { tag: C.ENUM, name: 'printer-state', value: C.PRINTER_IDLE },
     { tag: C.KEYWORD, name: 'printer-state-reasons', value: 'none' },
     { tag: C.KEYWORD, name: 'ipp-versions-supported', value: '1.1' }, // 1.0, 1.1
-    { tag: C.ENUM, name: 'operations-supported', values: [C.PRINT_JOB, C.VALIDATE_JOB, C.GET_JOBS, C.GET_PRINTER_ATTRIBUTES, C.CANCEL_JOB, C.GET_JOB_ATTRIBUTES] }, // C.PRINT_JOB, C.PRINT_URI, C.VALIDATE_JOB, C.CREATE_JOB, C.SEND_DOCUMENT, C.SEND_URI, C.CANCEL_JOB, C.GET_JOB_ATTRIBUTES, C.GET_JOBS, C.GET_PRINTER_ATTRIBUTES, C.HOLD_JOB, C.RELEASE_JOB, C.RESTART_JOB, C.PAUSE_PRINTER, C.RESUME_PRINTER, C.PURGE_JOBS
+    { tag: C.ENUM, name: 'operations-supported', values: [C.PRINT_JOB, C.VALIDATE_JOB, C.GET_JOBS, C.GET_PRINTER_ATTRIBUTES, C.CANCEL_JOB, C.GET_JOB_ATTRIBUTES] },
     { tag: C.CHARSET, name: 'charset-configured', value: 'utf-8' },
     { tag: C.CHARSET, name: 'charset-supported', value: 'utf-8' },
     { tag: C.NATURAL_LANG, name: 'natural-language-configured', value: 'en-us' },
