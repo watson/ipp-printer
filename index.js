@@ -52,7 +52,7 @@ function Printer (opts) {
   var self = this
 
   this.server = http.createServer(function handleRequest (req, res) {
-    debug('incoming request: %s %s', req.method, req.url)
+    debug('HTTP request: %s %s', req.method, req.url)
 
     if (req.method !== 'POST') {
       res.writeHead(405)
@@ -124,7 +124,12 @@ Printer.prototype.getJob = function (id) {
 }
 
 function router (printer, req, res) {
-  debug('new IPP request %d (operation: %d)', req.requestId, req.operationId, util.inspect(req.groups, { depth: null }))
+  debug('IPP/%d.%d operation %d (request #%d)',
+    req.version.major,
+    req.version.minor,
+    req.operationId,
+    req.requestId,
+    util.inspect(req.groups, { depth: null }))
 
   res.send = send.bind(null, req, res)
 
@@ -172,6 +177,6 @@ function send (req, res, statusCode, _groups) {
     'Content-Type': 'application/ipp'
   })
 
-  debug('responding to request %d', req.requestId, util.inspect(obj, { depth: null }))
+  debug('responding to request #%d', req.requestId, util.inspect(obj, { depth: null }))
   res.end(buf)
 }
