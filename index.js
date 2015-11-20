@@ -172,5 +172,6 @@ function send (req, res, statusCode, _groups) {
     'Content-Type': 'application/ipp'
   })
 
+  debug('responding to request %d', req.requestId, util.inspect(obj, { depth: null }))
   res.end(buf)
 }
