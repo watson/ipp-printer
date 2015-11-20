@@ -79,14 +79,14 @@ Attributes example:
 See the [ipp-encoder](https://github.com/watson/ipp-encoder) for an
 explanation of the job states and tag values.
 
-### Event: request
+### Event: operation
 
 ```js
-function (request) {}
+function (operation) {}
 ```
 
-Emitted each time a new IPP request is received. This event is more low
-level than the job event as it will be emitted on all incoming IPP
+Emitted each time a new IPP operation is received. This event is more
+low level than the job event as it will be emitted on all incoming IPP
 operations.
 
 This module currently supports the minimum set of operations required by
@@ -99,11 +99,7 @@ the IPP standard:
 - get-jobs (0x0a)
 - get-printer-attributes (0x0b)
 
-The `request` object is a readable stream of the IPP data field. The
-print-job operation is currently the only operation where the `request`
-stream contains any data.
-
-The `request` object have the following properties supplied by the
+The `operation` object have the following properties supplied by the
 printer client:
 
 - `version` - An object containing the major and minor IPP version of
@@ -111,6 +107,9 @@ printer client:
 - `operationId` - The id of the IPP operation
 - `requestId` - The id of the IPP request
 - `groups` - And array of IPP attribute groups
+
+See the [ipp-encoder](https://github.com/watson/ipp-encoder) for an
+explanation of the different operation types.
 
 ### Event: error
 

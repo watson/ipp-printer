@@ -10,7 +10,6 @@ var debug = require('debug')(require('./package').name)
 var utils = require('./lib/utils')
 var groups = require('./lib/groups')
 var operations = require('./lib/operations')
-var Request = require('./lib/request')
 
 var C = ipp.CONSTANTS
 
@@ -64,38 +63,27 @@ function Printer (opts) {
       return
     }
 
-    var body
+    req.on('data', consumeAttrGroups)
+    req.on('end', fail)
 
-    req.on('data', onData)
-    req.on('end', onEnd)
-
-    function onData (chunk) {
-      body = body ? Buffer.concat([body, chunk]) : chunk
+    function consumeAttrGroups (chunk) {
+      req._body = req._body ? Buffer.concat([req._body, chunk]) : chunk
 
       try {
-        body = ipp.request.decode(body)
+        req._body = ipp.request.decode(req._body)
       } catch (e) {
         debug('incomplete IPP body - waiting for more data...')
         return
       }
 
-      var ippRequest = new Request(body)
+      req.removeListener('data', consumeAttrGroups)
+      req.removeListener('end', fail)
 
-      if (body.data.length) {
-        debug('writing %d left over bytes to ippRequest', body.data.length)
-        ippRequest.write(body.data)
-      }
-
-      req.removeListener('data', onData)
-      req.removeListener('end', onEnd)
-      req.on('end', ippRequest.end.bind(ippRequest))
-      req.pipe(ippRequest)
-
-      self.emit('request', ippRequest)
-      router(self, ippRequest, res)
+      self.emit('operation', req._body)
+      router(self, req, res)
     }
 
-    function onEnd () {
+    function fail () {
       self.emit('error', new Error('Malformed IPP request'))
     }
   })
@@ -124,18 +112,20 @@ Printer.prototype.getJob = function (id) {
 }
 
 function router (printer, req, res) {
+  var body = req._body
+
   debug('IPP/%d.%d operation %d (request #%d)',
-    req.version.major,
-    req.version.minor,
-    req.operationId,
-    req.requestId,
-    util.inspect(req.groups, { depth: null }))
+    body.version.major,
+    body.version.minor,
+    body.operationId,
+    body.requestId,
+    util.inspect(body.groups, { depth: null }))
 
-  res.send = send.bind(null, req, res)
+  res.send = send.bind(null, body, res)
 
-  if (req.version.major !== 1) return res.send(C.SERVER_ERROR_VERSION_NOT_SUPPORTED)
+  if (body.version.major !== 1) return res.send(C.SERVER_ERROR_VERSION_NOT_SUPPORTED)
 
-  switch (req.operationId) {
+  switch (body.operationId) {
     // Printer Operations
     case C.PRINT_JOB: return operations.printJob(printer, req, res)
     case C.VALIDATE_JOB: return operations.validateJob(printer, req, res)
@@ -145,7 +135,7 @@ function router (printer, req, res) {
     case C.CREATE_JOB:
     case C.PAUSE_PRINTER:
     case C.RESUME_PRINTER:
-    case C.PURGE_JOBS: return printer.emit('error', new Error('Unsupported operation id: ' + req.operationId))
+    case C.PURGE_JOBS: return printer.emit('error', new Error('Unsupported operation id: ' + body.operationId))
 
     // Job Operations
     case C.CANCEL_JOB: return operations.cancelJob(printer, req, res)
@@ -154,9 +144,9 @@ function router (printer, req, res) {
     case C.SEND_URI:
     case C.HOLD_JOB:
     case C.RELEASE_JOB:
-    case C.RESTART_JOB: return printer.emit('error', new Error('Unsupported operation id: ' + req.operationId))
+    case C.RESTART_JOB: return printer.emit('error', new Error('Unsupported operation id: ' + body.operationId))
 
-    default: return printer.emit('error', new Error('Unknown operation id: ' + req.operationId))
+    default: return printer.emit('error', new Error('Unknown operation id: ' + body.operationId))
   }
 }
 
