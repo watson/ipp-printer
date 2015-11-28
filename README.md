@@ -135,6 +135,15 @@ An array of all jobs handled by the printer.
 
 An instance of [`http.Server`](https://nodejs.org/api/http.html#http_class_http_server).
 
+## Debugging
+
+To see the communication between the client and the server, enable
+debugging mode by setting the environment variable `DEBUG=ipp-printer`.
+
+If you open an issue because the module crashes or if the client cannot
+communicate properly with the printer it helps a lot if you attach the
+client/server communication to the issue.
+
 ## License
 
 MIT
