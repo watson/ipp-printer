@@ -160,6 +160,8 @@ function send (req, res, statusCode, _groups) {
   obj.groups = [groups.operationAttributesTag(ipp.STATUS_CODES[statusCode])]
   if (_groups) obj.groups = obj.groups.concat(_groups)
 
+  debug('responding to request #%d', req.requestId, util.inspect(obj, { depth: null }))
+
   var buf = ipp.response.encode(obj)
 
   res.writeHead(200, {
@@ -167,6 +169,5 @@ function send (req, res, statusCode, _groups) {
     'Content-Type': 'application/ipp'
   })
 
-  debug('responding to request #%d', req.requestId, util.inspect(obj, { depth: null }))
   res.end(buf)
 }
