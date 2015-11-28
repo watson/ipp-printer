@@ -106,7 +106,7 @@ printer client:
   the request (e.g. `{ major: 1, minor: 1 }`)
 - `operationId` - The id of the IPP operation
 - `requestId` - The id of the IPP request
-- `groups` - And array of IPP attribute groups
+- `groups` - An array of IPP attribute groups
 
 See the [ipp-encoder](https://github.com/watson/ipp-encoder) for an
 explanation of the different operation types.
