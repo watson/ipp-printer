@@ -30,7 +30,7 @@ function Printer (opts) {
     { tag: C.URI, name: 'printer-uri-supported', value: this.uri },
     { tag: C.KEYWORD, name: 'uri-security-supported', value: 'none' }, // none, ssl3, tls
     { tag: C.KEYWORD, name: 'uri-authentication-supported', value: 'none' }, // none, requesting-user-name, basic, digest, certificate
-    { tag: C.NAME_WITH_LANG, name: 'printer-name', value: this.name },
+    { tag: C.NAME_WITH_LANG, name: 'printer-name', value: { lang: 'en-us', value: this.name } },
     { tag: C.ENUM, name: 'printer-state', value: C.PRINTER_IDLE },
     { tag: C.KEYWORD, name: 'printer-state-reasons', value: 'none' },
     { tag: C.KEYWORD, name: 'ipp-versions-supported', value: '1.1' }, // 1.0, 1.1
