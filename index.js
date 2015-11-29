@@ -19,6 +19,7 @@ function Printer (opts) {
   if (!(this instanceof Printer)) return new Printer(opts)
   if (!opts) opts = { name: 'Node JS' }
   else if (typeof opts === 'string') opts = { name: opts }
+  if (!('mirrorMinor' in opts)) opts.mirrorMinor = true
 
   EventEmitter.call(this)
 
@@ -26,6 +27,7 @@ function Printer (opts) {
   this.jobs = []
   this._jobId = 0
   this.name = opts.name
+  this.mirrorMinor = opts.mirrorMinor
   this.attributes = [
     { tag: C.URI, name: 'printer-uri-supported', value: this.uri },
     { tag: C.KEYWORD, name: 'uri-security-supported', value: 'none' }, // none, ssl3, tls
@@ -121,7 +123,7 @@ function router (printer, req, res) {
     body.requestId,
     util.inspect(body.groups, { depth: null }))
 
-  res.send = send.bind(null, body, res)
+  res.send = send.bind(null, printer, body, res)
 
   if (body.version.major !== 1) return res.send(C.SERVER_ERROR_VERSION_NOT_SUPPORTED)
 
@@ -140,11 +142,12 @@ function router (printer, req, res) {
   }
 }
 
-function send (req, res, statusCode, _groups) {
-  if (typeof statusCode === 'object') return send(req, res, C.SUCCESSFUL_OK, statusCode)
+function send (printer, req, res, statusCode, _groups) {
+  if (typeof statusCode === 'object') return send(printer, req, res, C.SUCCESSFUL_OK, statusCode)
   if (statusCode === undefined) statusCode = C.SUCCESSFUL_OK
 
   var obj = {}
+  if (printer.mirrorMinor && req.version.major === 1) obj.version = req.version
   obj.statusCode = statusCode
   obj.requestId = req.requestId
   obj.groups = [groups.operationAttributesTag(ipp.STATUS_CODES[statusCode])]
