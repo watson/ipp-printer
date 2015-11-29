@@ -42,11 +42,11 @@ string or an object containing:
 - `name` - Name of the printer (defaults: `Node JS`)
 - `port` - Port the printer should listen on (defaults to a random
   available port)
-- `mirrorMinor` - Boolean. If `true` responses will mirror the minor IPP
-  version used by the client. This shouldn't be necessary in a perfect
-  world, but some versions of Windows doesn't like connecting to a
-  server running a different version of the IPP protocol than it self
-  (default: `true`)
+- `fallback` - Boolean. If `true`, responses to IPP/1.0 requests will
+  identify them selfs as coming from an IPP/1.0 server. This shouldn't
+  be necessary in a perfect world, but some versions of Windows doesn't
+  like connecting to a server running a different version of the IPP
+  protocol than it self (default: `true`)
 
 Note that the IPP standard specifies port 631 as the default IPP port,
 but most IPP clients are fine with connecting to another port.

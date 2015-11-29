@@ -19,7 +19,7 @@ function Printer (opts) {
   if (!(this instanceof Printer)) return new Printer(opts)
   if (!opts) opts = { name: 'Node JS' }
   else if (typeof opts === 'string') opts = { name: opts }
-  if (!('mirrorMinor' in opts)) opts.mirrorMinor = true
+  if (!('fallback' in opts)) opts.fallback = true
 
   EventEmitter.call(this)
 
@@ -27,7 +27,7 @@ function Printer (opts) {
   this.jobs = []
   this._jobId = 0
   this.name = opts.name
-  this.mirrorMinor = opts.mirrorMinor
+  this.fallback = opts.fallback
   this.attributes = [
     { tag: C.URI, name: 'printer-uri-supported', value: this.uri },
     { tag: C.KEYWORD, name: 'uri-security-supported', value: 'none' }, // none, ssl3, tls
@@ -147,7 +147,7 @@ function send (printer, req, res, statusCode, _groups) {
   if (statusCode === undefined) statusCode = C.SUCCESSFUL_OK
 
   var obj = {}
-  if (printer.mirrorMinor && req.version.major === 1) obj.version = req.version
+  if (printer.fallback && req.version.major === 1 && req.version.minor === 0) obj.version = { major: 1, minor: 0 }
   obj.statusCode = statusCode
   obj.requestId = req.requestId
   obj.groups = [groups.operationAttributesTag(ipp.STATUS_CODES[statusCode])]
