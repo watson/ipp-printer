@@ -12,7 +12,7 @@ var Printer = require('./')
 var p = new Printer(config)
 
 p.on('job', function (job) {
-  var filename = 'ipp-printer_' + new Date.toISOString() + '.ps'
+  var filename = 'ipp-printer_' + new Date().toISOString() + '.ps'
   job.pipe(fs.createWriteStream(filename)).on('finish', function () {
     console.log('printed:', filename)
   })
