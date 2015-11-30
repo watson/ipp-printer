@@ -3,10 +3,12 @@
   "version": "0.7.0",
   "description": "Create a printer on the network",
   "main": "index.js",
+  "bin": "./bin.js",
   "dependencies": {
     "bonjour": "git://github.com/watson/bonjour",
     "debug": "^2.2.0",
     "ipp-encoder": "^3.0.2",
+    "rc": "^1.1.5",
     "unique-concat": "^0.2.2"
   },
   "devDependencies": {
