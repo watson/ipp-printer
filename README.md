@@ -136,6 +136,10 @@ An instance of [`http.Server`](https://nodejs.org/api/http.html#http_class_http_
 A job is a readable stream containing the document to be printed. In
 many cases this will be in Postscript format.
 
+#### Event: cancelled
+
+Emitted if the job is cancelled prior to completion.
+
 #### `job.id`
 
 The id of the job.
