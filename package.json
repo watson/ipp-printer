@@ -7,6 +7,7 @@
     "bonjour": "git://github.com/watson/bonjour",
     "debug": "^2.2.0",
     "ipp-encoder": "^3.0.2",
+    "pump": "^1.0.1",
     "readable-stream": "^2.0.4",
     "unique-concat": "^0.2.2"
   },

@@ -146,6 +146,14 @@ function () {}
 
 Emitted if the job is cancelled prior to completion.
 
+#### Event: error
+
+```js
+function (error) {}
+```
+
+Emitted if the job encounters an error.
+
 #### `job.id`
 
 The id of the job.

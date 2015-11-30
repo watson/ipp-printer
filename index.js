@@ -48,7 +48,7 @@ function Printer (opts) {
     { tag: C.INTEGER, name: 'queued-job-count', value: jobCount },
     { tag: C.KEYWORD, name: 'pdl-override-supported', value: 'not-attempted' }, // attempted, not-attempted
     { tag: C.INTEGER, name: 'printer-up-time', value: utils.time.bind(null, this) },
-    { tag: C.KEYWORD, name: 'compression-supported', value: 'none' } // none, deflate, gzip, compress
+    { tag: C.KEYWORD, name: 'compression-supported', values: ['deflate', 'gzip'] } // none, deflate, gzip, compress
   ]
 
   var self = this
