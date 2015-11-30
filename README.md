@@ -165,9 +165,25 @@ The job state.
 See the [ipp-encoder](https://github.com/watson/ipp-encoder) for an
 explanation of the job states.
 
-#### `job.attributes`
+#### `job.uri`
 
-The job attributes.
+The job URI.
+
+#### `job.name`
+
+The job name.
+
+#### `job.userName`
+
+The name of the requesting user.
+
+#### `job.attributes([filter])`
+
+Returns an array of job attributes.
+
+If an array of attribute names or attribute groups is given as the first
+argument, the returned array will only include the attributes maching
+the supplied names or groups.
 
 Attributes example:
 
