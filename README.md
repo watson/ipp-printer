@@ -140,6 +140,10 @@ many cases this will be in Postscript format.
 
 #### Event: cancelled
 
+```js
+function () {}
+```
+
 Emitted if the job is cancelled prior to completion.
 
 #### `job.id`
