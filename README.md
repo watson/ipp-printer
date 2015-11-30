@@ -18,7 +18,7 @@ clients. But if you experience any problems please don't hesitate to
 [open an issue](https://github.com/watson/ipp-printer/issues).
 
 Be aware that this module currently doesn't support any of the security
-features build in to IPP, so don't print anything you don't want others
+features build into IPP, so don't print anything you don't want others
 to know on an open network.
 
 ## Installation
