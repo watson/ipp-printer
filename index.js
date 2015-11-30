@@ -86,7 +86,16 @@ function Printer (opts) {
     }
 
     function fail () {
-      self.emit('error', new Error('Malformed IPP request'))
+      // decode only the most essential part of the IPP request header to allow
+      // best possible response
+      if (req._body.length >= 8) {
+        var body = {
+          version: { major: req._body.readInt8(0), minor: req._body.readInt8(1) },
+          operationId: req._body.readInt16BE(2),
+          requestId: req._body.readInt32BE(4)
+        }
+      }
+      send(self, body, res, C.CLIENT_ERROR_BAD_REQUEST)
     }
   })
 
@@ -147,13 +156,13 @@ function send (printer, req, res, statusCode, _groups) {
   if (statusCode === undefined) statusCode = C.SUCCESSFUL_OK
 
   var obj = {}
-  if (printer.fallback && req.version.major === 1 && req.version.minor === 0) obj.version = { major: 1, minor: 0 }
+  if (printer.fallback && req && req.version.major === 1 && req.version.minor === 0) obj.version = { major: 1, minor: 0 }
   obj.statusCode = statusCode
-  obj.requestId = req.requestId
+  obj.requestId = req ? req.requestId : 0
   obj.groups = [groups.operationAttributesTag(ipp.STATUS_CODES[statusCode])]
   if (_groups) obj.groups = obj.groups.concat(_groups)
 
-  debug('responding to request #%d', req.requestId, util.inspect(obj, { depth: null }))
+  debug('responding to request #%d', obj.requestId, util.inspect(obj, { depth: null }))
 
   var buf = ipp.response.encode(obj)
 

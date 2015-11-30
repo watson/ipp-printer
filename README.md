@@ -124,14 +124,6 @@ printer client:
 See the [ipp-encoder](https://github.com/watson/ipp-encoder) for an
 explanation of the different operation types.
 
-### Event: error
-
-```js
-function (error) {}
-```
-
-Emitted if the IPP printer encounters an error.
-
 ### `printer.name`
 
 The printer name.
