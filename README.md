@@ -47,7 +47,7 @@ printer.on('job', function (job) {
 The Printer object can be initialized with either the printer name as a
 string or an object containing:
 
-- `name` - Name of the printer (defaults: `Node JS`)
+- `name` - Name of the printer (default: `Node JS`)
 - `port` - Port the printer should listen on (defaults to a random
   available port)
 - `fallback` - Boolean. If `true`, responses to IPP/1.0 requests will
