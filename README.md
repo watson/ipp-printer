@@ -52,6 +52,8 @@ string or an object containing:
 - `name` - Name of the printer (default: `Node JS`)
 - `port` - Port the printer should listen on (defaults to a random
   available port)
+- `zeroconf` - Boolean. If `true`, the printer will advertise it self on
+  the network using Bonjour/Zeroconf for easier setup (default: `true`)
 - `fallback` - Boolean. If `true`, responses to IPP/1.0 requests will
   identify them selfs as coming from an IPP/1.0 server. This shouldn't
   be necessary in a perfect world, but some versions of Windows doesn't

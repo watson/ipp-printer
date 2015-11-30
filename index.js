@@ -19,6 +19,7 @@ function Printer (opts) {
   if (!(this instanceof Printer)) return new Printer(opts)
   if (!opts) opts = { name: 'Node JS' }
   else if (typeof opts === 'string') opts = { name: opts }
+  if (!('zeroconf' in opts)) opts.zeroconf = true
   if (!('fallback' in opts)) opts.fallback = true
 
   EventEmitter.call(this)
@@ -102,7 +103,7 @@ function Printer (opts) {
   this.server.listen(opts.port, function () {
     self.port = self.server.address().port
     debug('IPP printer "%s" listening on port %s', self.name, self.port)
-    bonjour.tcp.publish({ type: 'ipp', port: self.port, name: self.name })
+    if (opts.zeroconf) bonjour.tcp.publish({ type: 'ipp', port: self.port, name: self.name })
   })
 
   function jobCount () {
