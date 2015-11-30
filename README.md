@@ -35,7 +35,7 @@ var Printer = require('ipp-printer')
 var printer = new Printer('My Printer')
 
 printer.on('job', function (job) {
-  var file = fs.createWriteStream('job.js')
+  var file = fs.createWriteStream('job.ps')
   job.pipe(file)
 })
 ```
