@@ -42,7 +42,9 @@ printer.on('job', function (job) {
 
 ## API
 
-### `new Printer([options])`
+### Class: Printer
+
+#### `new Printer([options])`
 
 The Printer object can be initialized with either the printer name as a
 string or an object containing:
@@ -59,40 +61,29 @@ string or an object containing:
 Note that the IPP standard specifies port 631 as the default IPP port,
 but most IPP clients are fine with connecting to another port.
 
-### Event: job
+#### Event: job
 
 ```js
 function (job) {}
 ```
 
-Emitted each time a new job is sent to the printer. The `job` is a
-readable stream of the document data being printed.
+Emitted each time a new job is sent to the printer. The `job` is an
+instance of the [Job class](#class-job).
 
-Each job object have the following attributes:
-
-- `id` - The id of the job
-- `state` - The job state
-- `attributes` - The job attributes
-
-Attributes example:
+Example writing a print job document to a file:
 
 ```js
-[
-  { tag: 0x45, name: 'job-printer-uri', value: 'ipp://watson.local.:3000/' },
-  { tag: 0x45, name: 'job-uri', value: 'ipp://watson.local.:3000/1' },
-  { tag: 0x42, name: 'job-name', value: 'My Document Title' },
-  { tag: 0x42, name: 'job-originating-user-name', value: 'watson' },
-  { tag: 0x44, name: 'job-state-reasons', value: 'none' },
-  { tag: 0x21, name: 'time-at-creation', value: 40 },
-  { tag: 0x47, name: 'attributes-charset', value: 'utf-8' },
-  { tag: 0x48, name: 'attributes-natural-language', value: 'en-us' }
-]
+printer.on('job', function (job) {
+  var filename = 'job-' + job.id + '.ps' // expect Postscript
+  var file = fs.createWriteStream(filename)
+  job.on('end', function () {
+    console.log('written job to', filename)
+  })
+  job.pipe(file)
+})
 ```
 
-See the [ipp-encoder](https://github.com/watson/ipp-encoder) for an
-explanation of the job states and tag values.
-
-### Event: operation
+#### Event: operation
 
 ```js
 function (operation) {}
@@ -124,21 +115,59 @@ printer client:
 See the [ipp-encoder](https://github.com/watson/ipp-encoder) for an
 explanation of the different operation types.
 
-### `printer.name`
+#### `printer.name`
 
 The printer name.
 
-### `printer.port`
+#### `printer.port`
 
 The port of the printer is listening on.
 
-### `printer.jobs`
+#### `printer.jobs`
 
 An array of all jobs handled by the printer.
 
-### `printer.server`
+#### `printer.server`
 
 An instance of [`http.Server`](https://nodejs.org/api/http.html#http_class_http_server).
+
+### Class: Job
+
+A job is a readable stream containing the document to be printed. In
+many cases this will be in Postscript format.
+
+#### `job.id`
+
+The id of the job.
+
+#### `job.state`
+
+The job state.
+
+See the [ipp-encoder](https://github.com/watson/ipp-encoder) for an
+explanation of the job states.
+
+#### `job.attributes`
+
+The job attributes.
+
+Attributes example:
+
+```js
+[
+  { tag: 0x45, name: 'job-printer-uri', value: 'ipp://watson.local.:3000/' },
+  { tag: 0x45, name: 'job-uri', value: 'ipp://watson.local.:3000/1' },
+  { tag: 0x42, name: 'job-name', value: 'My Document Title' },
+  { tag: 0x42, name: 'job-originating-user-name', value: 'watson' },
+  { tag: 0x44, name: 'job-state-reasons', value: 'none' },
+  { tag: 0x21, name: 'time-at-creation', value: 40 },
+  { tag: 0x47, name: 'attributes-charset', value: 'utf-8' },
+  { tag: 0x48, name: 'attributes-natural-language', value: 'en-us' }
+]
+```
+
+See the [ipp-encoder](https://github.com/watson/ipp-encoder) for an
+explanation of the tag values.
 
 ## Debugging
 
