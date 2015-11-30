@@ -6,12 +6,20 @@ module implements version 1.1 of the
 and uses [Bonjour](https://github.com/watson/bonjour) to advertise a
 printer on your local network that anyone can print to.
 
-*This module is still work in progress!*
-
 ![ipp-printer](https://raw.githubusercontent.com/watson/ipp-printer/master/ipp-printer.gif)
 
 [![Build status](https://travis-ci.org/watson/ipp-printer.svg?branch=master)](https://travis-ci.org/watson/ipp-printer)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
+
+## Project Status
+
+This module have been confirmed to work with both OS X and Windows
+clients. But if you experience any problems please don't hesitate to
+[open an issue](https://github.com/watson/ipp-printer/issues).
+
+Be aware that this module currently doesn't support any of the security
+features build in to IPP, so don't print anything you don't want others
+to know on an open network.
 
 ## Installation
 
