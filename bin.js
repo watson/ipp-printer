@@ -1,11 +1,11 @@
 #! /usr/bin/env node
-
 var config = require('rc')('ipp-printer', {
   name: 'ipp-printer', dir: process.cwd(), port: 3000
 })
 var nonPrivate = require('non-private-ip')
 var url = require('url')
 var ip = nonPrivate() || nonPrivate.private()
+var fs = require('fs')
 
 var Printer = require('./')
 
