@@ -20,7 +20,7 @@
   },
   "scripts": {
     "test": "standard",
-    "start": "node server.js"
+    "start": "node bin.js"
   },
   "repository": {
     "type": "git",
