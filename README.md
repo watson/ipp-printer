@@ -165,6 +165,14 @@ function () {}
 
 Emitted if the job is cancelled prior to completion.
 
+#### Event: abort
+
+```js
+function () {}
+```
+
+Emitted if the job is aborted prior to completion.
+
 #### Event: error
 
 ```js
