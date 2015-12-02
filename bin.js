@@ -1,4 +1,6 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
+'use strict'
+
 var config = require('rc')('ipp-printer', {
   name: 'ipp-printer', dir: process.cwd(), port: 3000
 })
@@ -16,8 +18,8 @@ p.on('job', function (job) {
   job.pipe(fs.createWriteStream(filename)).on('finish', function () {
     console.log('printed:', filename)
   })
-
 })
+
 p.server.on('listening', function () {
   console.log('ipp-printer listening on:', url.format({protocol: 'http', hostname: ip, port: config.port}))
 })
