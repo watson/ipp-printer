@@ -23,11 +23,30 @@ to know on an open network.
 
 ## Installation
 
+Install globally to use CLI:
+
 ```
-npm install ipp-printer
+npm install ipp-printer -g
 ```
 
-## Usage
+Or install locally to use in your project:
+
+```
+npm install ipp-printer --save
+```
+
+## CLI Usage
+
+Just run:
+
+```
+$ ipp-printer
+```
+
+The printer will now advertise it self on the network using Bonjour and
+write all jobs to the current working directory.
+
+## Programmatic Usage
 
 ```js
 var Printer = require('ipp-printer')
