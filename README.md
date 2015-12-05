@@ -3,7 +3,7 @@
 **Create a printer on your network using nothing but Node.js**. This
 module implements version 1.1 of the
 [IPP](https://en.wikipedia.org/wiki/Internet_Printing_Protocol) protocol
-and uses [Bonjour](https://github.com/watson/bonjour) to advertise a
+and uses [Bonjour/Zeroconf](https://github.com/watson/zeroconf) to advertise a
 printer on your local network that anyone can print to.
 
 ![ipp-printer](https://raw.githubusercontent.com/watson/ipp-printer/master/ipp-printer.gif)
@@ -43,8 +43,8 @@ Just run:
 $ ipp-printer
 ```
 
-The printer will now advertise it self on the network using Bonjour and
-write all jobs to the current working directory.
+The printer will now advertise it self on the network using
+Bonjour/Zeroconf and write all jobs to the current working directory.
 
 ## Programmatic Usage
 
