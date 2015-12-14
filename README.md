@@ -49,12 +49,21 @@ Bonjour/Zeroconf and write all jobs to the current working directory.
 ## Programmatic Usage
 
 ```js
+var fs = require('fs')
 var Printer = require('ipp-printer')
 
 var printer = new Printer('My Printer')
 
 printer.on('job', function (job) {
-  var file = fs.createWriteStream('job.ps')
+  console.log('[job %d] Printing document: %s', job.id, job.name)
+
+  var filename = 'job-' + job.id + '.ps' // .ps = PostScript
+  var file = fs.createWriteStream(filename)
+
+  job.on('end', function () {
+    console.log('[job %d] Document saved as %s', job.id, filename)
+  })
+
   job.pipe(file)
 })
 ```
@@ -198,7 +207,7 @@ The job URI.
 
 #### `job.name`
 
-The job name.
+The document name.
 
 #### `job.userName`
 
