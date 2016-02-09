@@ -6,6 +6,10 @@ module implements version 1.1 of the
 and uses [Bonjour/Zeroconf](https://github.com/watson/bonjour) to advertise a
 printer on your local network that anyone can print to.
 
+For a video introduction, check out the talk I gave at [Node.js
+Interactive 2015](https://www.youtube.com/watch?v=58Ti8w1yX2w) in
+Portland.
+
 ![ipp-printer](https://raw.githubusercontent.com/watson/ipp-printer/master/ipp-printer.gif)
 
 [![Build status](https://travis-ci.org/watson/ipp-printer.svg?branch=master)](https://travis-ci.org/watson/ipp-printer)
