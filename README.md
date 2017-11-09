@@ -91,6 +91,7 @@ string or an object containing:
   be necessary in a perfect world, but some versions of Windows doesn't
   like connecting to a server running a different version of the IPP
   protocol than it self (default: `true`)
+- `onerror` - Function. Callback for catching [`http.Server`](https://nodejs.org/api/http.html#http_class_http_server) errors. Useful for catching server initialization errors if there are network or configuration problems.
 
 Note that the IPP standard specifies port 631 as the default IPP port,
 but most IPP clients are fine with connecting to another port.
@@ -164,6 +165,14 @@ An array of all jobs handled by the printer.
 #### `printer.server`
 
 An instance of [`http.Server`](https://nodejs.org/api/http.html#http_class_http_server).
+
+#### `printer.destroy`
+
+A function to shut down the printer server and bonjour service.
+
+```js
+printer.destroy();
+```
 
 ### Class: Job
 
