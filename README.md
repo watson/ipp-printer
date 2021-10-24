@@ -56,7 +56,14 @@ Bonjour/Zeroconf and write all jobs to the current working directory.
 var fs = require('fs')
 var Printer = require('ipp-printer')
 
-var printer = new Printer('My Printer')
+var printer = new Printer({
+  name: 'ipp-printer',
+  // optional
+  sslConfig: {
+    cert: fs.readFileSync('path_to_ssl_cert_file'),
+    key: fs.readFileSync('path_to_ssl_key_file'),
+  },
+})
 
 printer.on('job', function (job) {
   console.log('[job %d] Printing document: %s', job.id, job.name)
@@ -164,6 +171,11 @@ An array of all jobs handled by the printer.
 #### `printer.server`
 
 An instance of [`http.Server`](https://nodejs.org/api/http.html#http_class_http_server).
+
+#### `printer.sslConfig`
+
+Config options of type https://nodejs.org/api/tls.html#tlscreateserveroptions-secureconnectionlistener
+in order to enable SSL/ TLS on the printer server.
 
 ### Class: Job
 
