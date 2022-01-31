@@ -5,7 +5,7 @@
   "main": "index.js",
   "bin": "./bin.js",
   "dependencies": {
-    "bonjour": "^3.0.0",
+    "bonjour": "https://github.com/sawgrassink/bonjour",
     "debug": "^2.2.0",
     "ipp-encoder": "^4.0.2",
     "non-private-ip": "^1.3.0",
@@ -13,6 +13,7 @@
     "pump": "^1.0.1",
     "rc": "^1.1.6",
     "readable-stream": "^2.0.5",
+    "server-destroy": "^1.0.1",
     "unique-concat": "^0.2.2"
   },
   "devDependencies": {
