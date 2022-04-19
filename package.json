@@ -1,6 +1,6 @@
 {
   "name": "ipp-printer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create a printer on the network",
   "main": "index.js",
   "bin": "./bin.js",
@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/watson/ipp-printer.git"
+    "url": "https://www.github.com/sawgrassink/ipp-printer"
   },
   "keywords": [
     "ipp",
@@ -38,12 +38,12 @@
     "mdns",
     "multicast"
   ],
-  "author": "Thomas Watson Steen <w@tson.dk> (https://twitter.com/wa7son)",
+  "author": "Sawgrass Technologies, Inc.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/watson/ipp-printer/issues"
+    "url": "https://www.github.com/sawgrassink/ipp-printer"
   },
-  "homepage": "https://github.com/watson/ipp-printer",
+  "homepage": "https://www.github.com/sawgrassink/ipp-printer",
   "coordinates": [
     55.6665721,
     12.5800915
